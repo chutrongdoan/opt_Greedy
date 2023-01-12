@@ -21,6 +21,7 @@ class Route:
         self.capacity = capacity
         self.capacity_now = capacity_now
         self.speed = speed 
+        self.time_first_start = -1
 
     def distance_point(self,point1,point2):
         return sqrt((point1[0] - point2[0])**2 + (point1[1]- point2[1])**2)
@@ -46,6 +47,8 @@ class Route:
             #print(trip_time)
             self.time_now = self.time_now + trip_time + serving_time
             self.capacity_now = self.capacity_now + capacity_add
+            if self.time_first_start == -1 :
+                self.time_first_start = self.time_now
             return True
         else:
             #print(new_point)
@@ -55,6 +58,10 @@ class Route:
         
     def return_route(self):
         return self.list_point 
+    def return_start_time(self):
+        return self.start_time 
+    def return_time_now(self):
+        return self.time_now 
 
 
 class Vihicle:
@@ -74,8 +81,12 @@ class Vihicle:
         return True
 
     def add_route(self,route):
-        self.route.append(route)
-
+        new_time = [route.return_start_time(),route.return_time_now()]
+        if self.check_time_busy(new_time):
+            self.route.append(route)
+            return True
+        else:
+            return False
     def return_route(self):
         return self.route
 
