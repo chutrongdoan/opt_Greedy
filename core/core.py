@@ -48,7 +48,7 @@ class Route:
             self.time_now = self.time_now + trip_time + serving_time
             self.capacity_now = self.capacity_now + capacity_add
             if self.time_first_start == -1 :
-                self.time_first_start = self.time_now
+                self.time_first_start = self.time_now - serving_time
             return True
         else:
             #print(new_point)
@@ -62,6 +62,8 @@ class Route:
         return self.start_time 
     def return_time_now(self):
         return self.time_now 
+    def return_time_first_start(self):
+        return self.time_first_start
 
 
 class Vihicle:
@@ -71,8 +73,13 @@ class Vihicle:
         self.start_point_id = start_point_id
         self.route = []
         self.time_busy = []
+        self.new = 1
     def check_time_busy(self,new_time):
-        for time in time_busy:
+        if self.new ==1 :
+            return True
+        for time in self.time_busy:
+            #print(time[1])
+            #print(new_time[0])
             if time[1]>=new_time[0] and time[1]<=new_time[1] or new_time[1]>=time[0] and new_time[1]<=time[1]:
                 return False
             if time[0]>=new_time[0] and time[1]<=new_time[1] or new_time[0]>=time[0] and new_time[1]<=time[1]:
@@ -83,6 +90,8 @@ class Vihicle:
     def add_route(self,route):
         new_time = [route.return_start_time(),route.return_time_now()]
         if self.check_time_busy(new_time):
+            self.time_busy.append(new_time)
+            self.new = 0
             self.route.append(route)
             return True
         else:
