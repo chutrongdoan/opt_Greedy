@@ -1,7 +1,7 @@
 from core.core import *
 import numpy as np
 import time
-def pipeline(path_data_point='data_anh_Son/VRPTW_data_sample_1.xlsx', path_data_vehicle = 'data_anh_Son/VRPTW_data_sample_vehicle_list.xlsx'):
+def pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle = 'data/VRPTW_data_sample_vehicle_list.xlsx'):
     data = read_xlsx(path_data_point)
     vehicle_data = read_xlsx(path_data_vehicle)
     ### constant

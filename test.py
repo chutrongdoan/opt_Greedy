@@ -1,6 +1,6 @@
 from pipeline import pipeline
 
-vehicles,point = pipeline(path_data_point='data_anh_Son/VRPTW_data_sample_1.xlsx', path_data_vehicle = 'data_anh_Son/VRPTW_data_sample_vehicle_list.xlsx')
+vehicles,point = pipeline(path_data_point='data/VRPTW_data_sample_2.xlsx', path_data_vehicle = 'data/VRPTW_data_sample_vehicle_list.xlsx')
 
 xe = 0
 for i in vehicles:
