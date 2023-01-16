@@ -23,6 +23,15 @@ class Route:
         self.speed = speed 
         self.time_first_start = -1
 
+        self.time_arrival = []
+        self.time_arrival.append(start_time)
+
+        self.list_capacity = []
+        self.list_capacity.append(0)
+
+        self.distance_cost = 0
+
+
     def distance_point(self,point1,point2):
         return sqrt((point1[0] - point2[0])**2 + (point1[1]- point2[1])**2)
 
@@ -34,6 +43,7 @@ class Route:
 
     def check_time(self, new_point, earliest_arrival_time,latest_arrival_time):
         trip_time = self.distance_point(self.point_now,new_point)/self.speed
+        #print(trip_time)
         if self.time_now + trip_time > latest_arrival_time or self.time_now + trip_time < earliest_arrival_time:
             return False
         else:
@@ -43,10 +53,17 @@ class Route:
         trip_time = self.distance_point(self.point_now,new_point)/self.speed
         if self.check_capacity(capacity_add) and self.check_time(new_point, earliest_arrival_time,latest_arrival_time):
             self.list_point.append(new_point)
+            self.distance_cost += self.distance_point(self.point_now,new_point)
+            
             self.point_now = new_point
+
+            self.time_arrival.append(self.time_now + trip_time)
             #print(trip_time)
             self.time_now = self.time_now + trip_time + serving_time
             self.capacity_now = self.capacity_now + capacity_add
+
+            self.list_capacity.append(self.capacity_now)
+        
             if self.time_first_start == -1 :
                 self.time_first_start = self.time_now - serving_time
             return True
@@ -64,6 +81,15 @@ class Route:
         return self.time_now 
     def return_time_first_start(self):
         return self.time_first_start
+
+    def return_time_arrival(self):
+        return self.time_arrival
+
+    def return_list_capacity(self):
+        return self.list_capacity
+
+    def return_distance_cost(self):
+        return self.distance_cost
 
 
 class Vihicle:

@@ -38,7 +38,7 @@ def pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle 
                 return True
         return False
     #print(depot[0])
-    def Greedy(): 
+    def Run(): 
         #routes = []
         st_time = time.time()
         start_time = 0
@@ -107,7 +107,7 @@ def pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle 
 
     while check_remaining_point():
         st_time = time.time()
-        route = Greedy()
+        route = Run()
         kt = 0
         for vehicle in vehicles:
             if vehicle.check_time_busy([route.return_start_time(),route.return_time_now()]):
