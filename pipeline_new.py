@@ -1,11 +1,10 @@
 from core.core import *
 import numpy as np
 import time
-def pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle = 'data/VRPTW_data_sample_vehicle_list.xlsx'):
+def pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle = 'data/VRPTW_data_sample_vehicle_list.xlsx',time_waiting_max = 0):
     data = read_xlsx(path_data_point)
     vehicle_data = read_xlsx(path_data_vehicle)
     ### constant
-
     capacity = 200
     speed = 1
     number_point = len(data)
@@ -39,15 +38,13 @@ def pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle 
         return False
     #print(depot[0])
     def Run(): 
-        #routes = []
         st_time = time.time()
         start_time = 0
-        #start_time = min(data['earliest_arrival_time']) -
 
         start_point = depot
         while check_remaining_point():
-            route = Route(start_point = depot, start_time = start_time, depot_start_time = 0, depot_end_time = 230, capacity = 200,speed = speed)
-            #kt_all = False
+            route = Route(start_point = depot, start_time = start_time, depot_start_time = 0, depot_end_time = 230, capacity = 200,speed = speed,time_waiting_max = time_waiting_max)
+            add_first = 1
             kt_ap = False
             while check_remaining_point():
                 points = []
@@ -69,17 +66,31 @@ def pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle 
                     ,serving_time = data['serving_time'][list_distance_now[stt_ut]]):
                         #print([data['x_coor'][list_distance_now[stt_ut]+1],data['y_coor'][list_distance_now[stt_ut]+1]])
                         #print(point[list_distance_now[stt_ut]+1])
+                        if route.return_time_waiting_max() > 0:
+                            route.append_sum_time_waiting()
                         point[list_distance_now[stt_ut]] = 1
                         kt_ap = True
                         start_point = [data['x_coor'][list_distance_now[stt_ut]],data['y_coor'][list_distance_now[stt_ut]]]
+                        route.reset_time_waiting()
+                        add_first = 1
                         break
-                if stt_ut == len(list_distance_now)-1:
+                        
+                if stt_ut == len(list_distance_now)-1 and not(route.check_time_waiting()):
                     kt_all = True
                     break
                         #print('11111')
-            if kt_ap and kt_all:
+                
+                
+                if stt_ut == len(list_distance_now)-1 and route.check_time_waiting():
+                    if add_first == 1:
+                        time_old = route.return_time_now()
+                        add_first = 0
+                    route.add_time_waiting()
+            if (kt_ap and kt_all) or (kt_ap and not route.check_time_waiting) :
                 start_time = route.return_time_now()
-                route.excute(new_point = [data['x_coor'][0],data['y_coor'][0]] , capacity_add = data['demand'][0]\
+                if route.return_time_waiting_max() > 0:
+                    route.set_time_now(time_old)
+                route.excute_depot(new_point = [data['x_coor'][0],data['y_coor'][0]] , capacity_add = data['demand'][0]\
                     , earliest_arrival_time = data['earliest_arrival_time'][0],latest_arrival_time = data['latest_arrival_time'][0]\
                     ,serving_time = data['serving_time'][0])
                 start_time = route.return_time_now()
@@ -87,14 +98,19 @@ def pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle 
                 #routes.append(route)
             else:
                 start_time += 1
+            #print('aaaaaaaaaaaaa',max(data['latest_arrival_time']))
             if start_time>max(data['latest_arrival_time']):
+                #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                # route.excute_depot(new_point = [data['x_coor'][0],data['y_coor'][0]] , capacity_add = data['demand'][0]\
+                #     , earliest_arrival_time = data['earliest_arrival_time'][0],latest_arrival_time = data['latest_arrival_time'][0]\
+                #     ,serving_time = data['serving_time'][0])
                 return route
-                #break
-            
-            #break
-        # for r in routes:
-        #     #pass
-        #     print(r.return_route())
+
+        if not check_remaining_point():
+            route.excute_depot(new_point = [data['x_coor'][0],data['y_coor'][0]] , capacity_add = data['demand'][0]\
+                    , earliest_arrival_time = data['earliest_arrival_time'][0],latest_arrival_time = data['latest_arrival_time'][0]\
+                    ,serving_time = data['serving_time'][0])
+        
         return route
 
 
@@ -119,8 +135,3 @@ def pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle 
         if time.time() - st_time > 10:
             break
     return vehicles,point
-
-
-
-
-

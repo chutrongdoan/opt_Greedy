@@ -1,6 +1,6 @@
-from pipeline import pipeline
+from pipeline_new import pipeline
 
-vehicles,point = pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle = 'data/VRPTW_data_sample_vehicle_list.xlsx')
+vehicles,point = pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle = 'data/VRPTW_data_sample_vehicle_list.xlsx',time_waiting_max = 1236)
 sum_distance = 0
 xe = 0
 for i in vehicles:
@@ -9,6 +9,7 @@ for i in vehicles:
         print("xe ",xe," Thời gian khởi hành: ",j.return_time_first_start(),' ',j.return_route())
         print("thời gian đến: ",j.return_time_arrival())
         print("Tải hiện tại: ",j.return_list_capacity())
+        print("Thời gian đợi: ",j.return_sum_time_waiting())
         #print(j.return_distance_cost())
         sum_distance += j.return_distance_cost()
     
