@@ -1,6 +1,6 @@
 from pipeline_new import pipeline
 
-vehicles,point = pipeline(path_data_point='data/VRPTW_data_sample_1.xlsx', path_data_vehicle = 'data/VRPTW_data_sample_vehicle_list.xlsx',time_waiting_max = 1236)
+vehicles,point = pipeline(path_data_point='data/VRPTW_data_sample_2.xlsx', path_data_vehicle = 'data/VRPTW_data_sample_vehicle_list.xlsx',time_waiting_max = 1236)
 sum_distance = 0
 xe = 0
 for i in vehicles:

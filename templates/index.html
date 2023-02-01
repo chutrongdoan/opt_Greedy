@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Document Digitalize</title>
+    <style type="text/css">
+      .main {
+        width: 100%;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <form action="/" method="POST" enctype="multipart/form-data">
+        <input name="file1" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" multiple />
+        <br />
+        <br />
+        <input name="file2" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" multiple />
+        <br />
+        <br />
+        <label for="fname">Thời gian đợi tối đa: </label>
+        <input type="text" id="fname" name="time_max_waiting" value="0"><br><br>
+        <input type="submit" />
+        <br />
+        <br />
+        {% if docInfo  %}
+        
+        <code>{{docInfo}}</code>
+        {% endif %}
+        <br />
+        {% if docInfo and docInfo.sohieu %}
+        
+        <code>{{docInfo.sohieu}}</code>
+        {% endif %}
+        <br />
+        {% if docInfo and docInfo.donvi %}
+      
+        <code>{{docInfo.donvi}}</code>
+        {% endif %}
+        <br />
+        {% if docInfo and docInfo.tieude %}
+       
+        <code>{{docInfo.tieude}}</code>
+        {% endif %}
+        <br />
+        {% if docInfo and docInfo.noinhan %}
+       
+        <code>{{docInfo.noinhan}}</code>
+        {% endif %}
+        <br />
+        <!-- <code>{{docInfo}}</code>
+        <br /> -->
+        {% if docInfo and docInfo.ConDau %}
+        <img src={{docInfo.ConDau}} />
+        {% endif %}
+        
+      </form>
+    </div>
+  </body>
+</html>
